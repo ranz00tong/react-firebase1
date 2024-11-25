@@ -8,6 +8,8 @@ const Login = () => {
     const [email,setEmail] = useState('');
     const [pwd,setPwd] = useState(null);
     const [phone,setPhone] = useState(null);
+    const [isOtp,setIsOtp] = useState(false);
+    const [code,setCode] = useState('');
     const navigate = useNavigate();
 
     const loginHandler = (event) =>{
@@ -52,14 +54,25 @@ const Login = () => {
     }
 
     const OtpHandler = () =>{
-        
         const auth = getAuth(app);
-        const appVerifier = new RecaptchaVerifier(auth, 'abc', {});
+        const appVerifier = new RecaptchaVerifier(auth, 'abc', {'size':'invisible'});
         signInWithPhoneNumber(auth,phone,appVerifier)
         .then(res=>{
             window.confirmationResult = res;
-            console.log('otp sent')
+            console.log('otp sent');
             console.log(res);
+            setIsOtp(true);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+
+    const confirmOtp = () =>{
+        window.confirmationResult.confirm(code)
+        .then(res=>{
+            console.log(res);
+            navigate('/dashboard');
         })
         .catch(err=>{
             console.log(err);
@@ -78,11 +91,20 @@ const Login = () => {
             <button type='button' onClick={LoginWithFacebook}>Login with Facebook</button>
             <br />
             <br />
-            
+            {!isOtp?
+            <div>
             <h3>Login with OTP</h3>
             <input onChange={(e)=>{setPhone(e.target.value)}} type="text" placeholder='phone number'/>
             <div id='abc'></div>
             <button type='button' onClick={OtpHandler}>send otp</button>
+            </div>
+            :
+            <div>
+                <h3>confirm otp</h3>
+                <input onChange={(e)=>{setCode(e.target.value)}} type="text" />
+                <button type='button' onClick={confirmOtp}>confirm</button>
+            </div>
+            }
          
         </form>
     </div>
