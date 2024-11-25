@@ -18,6 +18,8 @@ const Login = () => {
        signInWithEmailAndPassword(auth,email,pwd)
        .then(res=>{
         console.log(res.user);
+        localStorage.setItem('isLogin',true);
+        console.log(localStorage.getItem('isLogin'))
         navigate('/dashboard')
        })
        .catch(err=>{

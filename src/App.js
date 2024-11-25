@@ -9,6 +9,9 @@ import FacultyList from './components/FacultyList';
 import UpdateFaculty from './components/UpdateFaculty';
 import Signup from './components/Signup';
 import Login from './components/Login';
+import checkAuth from './checkAuth';
+
+
 
 
 function App() {
@@ -16,7 +19,7 @@ function App() {
     {path:'',Component:Login},
     {path:'signup',Component:Signup},
     {path:'login',Component:Login},
-    {path:'dashboard', Component:Dashboard,children:[
+    {path:'dashboard',loader:checkAuth, Component:Dashboard,children:[
       {path:'',Component:StudentList},
       {path:'studentList',Component:StudentList},
       {path:'addStudent',Component:AddStudent},
